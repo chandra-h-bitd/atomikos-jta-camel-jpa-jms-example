@@ -30,7 +30,7 @@ public class PersonServiceTest {
 
 
     @Test
-    public void testCamelRoute() throws InterruptedException {
+    public void testCamelRoute() throws Exception {
 
         ProducerTemplate template = camelContext.createProducerTemplate();
 
@@ -46,10 +46,12 @@ public class PersonServiceTest {
 
         assertEquals("Niels Peter", personService.receivePersonCreatedMessage());
         assertEquals("Lucas", personService.receivePersonCreatedMessage());
+
+        camelContext.stop();
     }
 
     @Test
-    public void testCamelRouteRollback() throws InterruptedException {
+    public void testCamelRouteRollback() throws Exception {
 
         camelRoute.setFail(true);
         ProducerTemplate template = camelContext.createProducerTemplate();
@@ -62,5 +64,7 @@ public class PersonServiceTest {
 
         assertEquals(0, personRepository.count());
         assertNull(personService.receivePersonCreatedMessage());
+
+        camelContext.stop();
     }
 }
